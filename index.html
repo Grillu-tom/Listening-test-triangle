@@ -119,6 +119,29 @@
   oninput="validateIntro()">
 
 </div>
+<div id="stringPage" style="display:none;">
+
+  <h2>Choose the guitar string</h2>
+
+  <label>
+    <input type="radio" name="string" value="Mi">
+    E string
+  </label>
+
+  <br><br>
+
+  <label>
+    <input type="radio" name="string" value="Sol">
+    G string
+  </label>
+
+  <br><br>
+
+  <button id="continueBtn" onclick="startExperiment()" disabled>
+    Continue
+  </button>
+
+</div>
 
 <br>
 
@@ -186,11 +209,28 @@
 async function startTest() {
 
   document.getElementById("introPage").style.display = "none";
+  document.getElementById("stringPage").style.display = "block";
+}
+
+async function startExperiment() {
+
+  soundSets = await fetch("sounds.json")
+    .then(r => r.json());
+
+  const selectedString =
+    document.querySelector('input[name="string"]:checked').value;
+
+  files = soundSets[selectedString].files;
+  referenceFile = soundSets[selectedString].reference;
+
+  currentIndex = Math.floor(files.length / 2);
+
+  document.getElementById("stringPage").style.display = "none";
   document.getElementById("testPage").style.display = "block";
 
   await loadTrials();
 }
-
+  
 function buildTrial() {
   document.getElementById("trialCounter").innerText =
 `Trial ${trialNumber}/${MAX_TRIALS}`;
@@ -204,19 +244,19 @@ comparisonFiles = [
 
 {
     visibleLabel: "A",
-    file: positions[0] === 0 ? intruder : "reference.wav",
+    file: positions[0] === 0 ? intruder : referenceFile
     isCorrect: positions[0] === 0
 },
 
 {
     visibleLabel: "B",
-    file: positions[1] === 0 ? intruder : "reference.wav",
+    file: positions[1] === 0 ? intruder : referenceFile,
     isCorrect: positions[1] === 0
 },
 
 {
     visibleLabel: "C",
-    file: positions[2] === 0 ? intruder : "reference.wav",
+    file: positions[2] === 0 ? intruder : referenceFile,
     isCorrect: positions[2] === 0
 }
 
@@ -366,19 +406,9 @@ function shuffle(array) {
   return array;
 }
 
-const files = [
-  "musicien/audio_f-lim_8000_Hz_rayleigh_musician.wav", // 0
-  "musicien/audio_f-lim_6000_Hz_rayleigh_musician.wav", // 1
-  "musicien/audio_f-lim_4000_Hz_rayleigh_musician.wav", // 2
-  "musicien/audio_f-lim_3800_Hz_rayleigh_musician.wav", // 3
-  "musicien/audio_f-lim_3400_Hz_rayleigh_musician.wav", // 4
-  "musicien/audio_f-lim_3200_Hz_rayleigh_musician.wav", // 5
-  "musicien/audio_f-lim_3000_Hz_rayleigh_musician.wav", // 6
-  "musicien/audio_f-lim_2800_Hz_rayleigh_musician.wav", // 7
-  "musicien/audio_f-lim_2000_Hz_rayleigh_musician.wav", // 8
-  "musicien/audio_f-lim_1800_Hz_rayleigh_musician.wav", // 9
-  "musicien/audio_f-lim_1600_Hz_rayleigh_musician.wav"  // 10
-];
+let soundSets = {};
+let files = [];
+let referenceFile = "";
 
 let currentIndex = Math.floor(files.length / 2);
 let consecutiveCorrect = 0;
@@ -540,6 +570,16 @@ function checkSelection() {
 ).disabled =
   !selected || listeningStep !== "finished";
 }
+
+document.querySelectorAll('input[name="string"]').forEach(radio => {
+
+  radio.addEventListener("change", () => {
+
+    document.getElementById("continueBtn").disabled = false;
+
+  });
+
+});
 // =========================
 // SUBMIT
 // =========================
