@@ -1,0 +1,792 @@
+<style>
+#comparisonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 50px;
+  align-items: flex-start;
+}
+
+.audio-block {
+  text-align: center;
+}
+
+.indicator {
+  padding: 15px 25px;
+  border: 2px solid #999;
+  border-radius: 8px;
+  font-weight: bold;
+  min-width: 120px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.indicator.active {
+  background-color: #4CAF50;
+  color: white;
+  border-color: #4CAF50;
+  transform: scale(1.05);
+}
+
+.play-sequence-container {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.submit-container {
+  text-align: center;
+  margin-top: 20px;
+}
+</style>
+
+<div id="introPage">
+
+  <h1>Comparison between synthesized guitar sounds</h1>
+
+  <p>Thank you for participating in this listening experiment.</p>
+  <p>The test is supposed to last 15 minutes. The test is anonymous and the data will not be saved if you stop during the test. </p>
+  <p>
+    You will need to perceive the subtle differences between guitar sounds : make sure you are in a quiet environment.
+  </p>
+
+  <hr>
+
+  <h3>Participant information</h3>
+
+  <label>Pseudo:</label><br>
+  <input
+  type="text"
+  id="participant"
+  placeholder="user001"
+  oninput="validateIntro()">
+
+  <br><br>
+
+  <label>Age:</label><br>
+  <input
+  type="number"
+  id="age"
+  min="0"
+  max="120"
+  oninput="validateIntro()">
+
+  <br><br>
+
+  <label>Listening device:</label><br>
+
+  <label>
+    <input type="radio" name="device" value="Headphones">
+    Headphones
+  </label>
+
+  <label>
+    <input type="radio" name="device" value="Speakers">
+    Speakers
+  </label>
+
+  <br><br>
+
+  <label>Do you play a musical instrument?</label><br>
+
+  <label>
+    <input type="radio" name="musician" value="Yes" onchange="toggleInstrument(true)">
+    Yes
+  </label>
+
+  <label>
+    <input type="radio" name="musician" value="No" onchange="toggleInstrument(false)">
+    No
+  </label>
+
+  <br><br>
+
+  <div id="instrumentDetails" style="display:none;">
+
+  <label>Which instrument?</label><br>
+  <input
+  type="text"
+  id="instrument"
+  placeholder="e.g. guitar, piano, violin"
+  oninput="validateIntro()">
+
+  <br><br>
+
+  <label>How many years?</label><br>
+  <input
+  type="number"
+  id="yearsPractice"
+  min="0"
+  max="100"
+  oninput="validateIntro()">
+
+</div>
+
+<br>
+
+<button id="startBtn" onclick="startTest()" disabled>
+  Start Test
+</button>
+
+</div>
+<!-- ================= TEST PAGE ================= -->
+
+<div id="testPage" style="display:none;">
+  
+<div id="trialCounter" style="font-weight:bold; margin-bottom:15px;">
+</div>
+  
+<hr>
+
+<h2>Ecoute les 3 audios et identifie celui qui est différent</h2>
+
+<p>Deux extraits sont identiques et l'un est différent. Tu ne peux les écouter qu'une fois.</p>
+
+
+<div class="play-sequence-container">
+  <button id="playSequenceButton" onclick="playSequence()">
+    ▶ Play sequence
+  </button>
+</div>
+
+<div id="playIndicators" style="margin-top:20px; display:flex; justify-content:center; gap:40px;">
+
+  <div id="indicatorA" class="indicator">
+    Audio A
+  </div>
+
+  <div id="indicatorB" class="indicator">
+    Audio B
+  </div>
+
+  <div id="indicatorC" class="indicator">
+    Audio C
+  </div>
+
+</div>
+  
+<hr>
+
+<div id="comparisonContainer"></div>
+
+<hr>
+
+<div style="text-align:center; margin-top:20px;">
+  <button id="submitButton" onclick="submitTest()" disabled>
+    Submit
+  </button>
+</div>
+
+</div>
+
+<script>
+
+// =========================
+// NAVIGATION
+// =========================
+
+async function startTest() {
+
+  document.getElementById("introPage").style.display = "none";
+  document.getElementById("testPage").style.display = "block";
+
+  await loadTrials();
+}
+
+function buildTrial() {
+  document.getElementById("trialCounter").innerText =
+`Trial ${trialNumber}/${MAX_TRIALS}`;
+
+const intruder = files[currentIndex];
+
+const matchIsA = Math.random() < 0.5;
+const positions = shuffle([0,1,2]);
+
+comparisonFiles = [
+
+{
+    visibleLabel: "A",
+    file: positions[0] === 0 ? intruder : "reference.wav",
+    isCorrect: positions[0] === 0
+},
+
+{
+    visibleLabel: "B",
+    file: positions[1] === 0 ? intruder : "reference.wav",
+    isCorrect: positions[1] === 0
+},
+
+{
+    visibleLabel: "C",
+    file: positions[2] === 0 ? intruder : "reference.wav",
+    isCorrect: positions[2] === 0
+}
+
+];
+
+
+  const container =
+    document.getElementById("comparisonContainer");
+
+  container.innerHTML = "";
+
+  comparisonFiles.forEach((item, index) => {
+
+    container.innerHTML += `
+
+<div class="audio-block">
+
+  <audio id="audio_${index}">
+    <source src="${item.file}" type="audio/wav">
+  </audio>
+
+
+  <label>
+    <input
+      type="radio"
+      name="comparison"
+      value="${item.visibleLabel}"
+      onchange="checkSelection()">
+    ${item.visibleLabel}
+  </label>
+
+</div>
+
+`;
+
+  });
+
+  document.getElementById("submitButton").disabled = true;
+
+  for (let key in playCounts) {
+    delete playCounts[key];
+  }
+
+  const refButton =
+    document.querySelector(
+      'button[onclick*="referenceAudio"]'
+    );
+
+  if (refButton) {
+    refButton.disabled = false;
+    refButton.innerText = "▶ Reference";
+  }
+listeningStep = "notPlayed";
+
+const playButton =
+  document.getElementById("playSequenceButton");
+
+playButton.disabled = false;
+playButton.innerText = "▶ Play sequence";
+}
+
+function activateIndicator(id) {
+
+  document
+    .querySelectorAll(".indicator")
+    .forEach(el => el.classList.remove("active"));
+
+  document
+    .getElementById(id)
+    .classList.add("active");
+}
+
+function clearIndicators() {
+
+  document
+    .querySelectorAll(".indicator")
+    .forEach(el => el.classList.remove("active"));
+}
+
+function toggleInstrument(show) {
+  document.getElementById("instrumentDetails").style.display =
+    show ? "block" : "none";
+
+  if (!show) {
+
+  document.getElementById("yearsPractice").value = "";
+
+  document.getElementById("instrument").value = "";
+}
+
+  validateIntro();
+}
+
+// =========================
+// VALIDATION INTRO
+// =========================
+
+function validateIntro() {
+  
+  const instrument =
+  document.getElementById("instrument")?.value.trim() || "";
+
+  const participant =
+    document.getElementById("participant")?.value.trim() || "";
+
+  const age =
+    document.getElementById("age")?.value || "";
+
+  const device =
+    document.querySelector('input[name="device"]:checked');
+
+  const musician =
+    document.querySelector('input[name="musician"]:checked');
+
+  const yearsPracticeEl =
+    document.getElementById("yearsPractice");
+
+  const years =
+    yearsPracticeEl ? yearsPracticeEl.value : "";
+
+  let valid = true;
+
+  if (participant === "") valid = false;
+  if (age === "") valid = false;
+  if (!device) valid = false;
+  if (!musician) valid = false;
+
+  if (musician && musician.value === "Yes") {
+
+  if (years === "") valid = false;
+
+  if (instrument === "") valid = false;
+}
+
+  document.getElementById("startBtn").disabled = !valid;
+}
+
+// =========================
+// AUDIO FILES
+// =========================
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [array[i], array[j]] = [array[j], array[i]];
+  }
+  return array;
+}
+
+const files = [
+  "musicien/audio_f-lim_8000_Hz_rayleigh_musician.wav", // 0
+  "musicien/audio_f-lim_6000_Hz_rayleigh_musician.wav", // 1
+  "musicien/audio_f-lim_4000_Hz_rayleigh_musician.wav", // 2
+  "musicien/audio_f-lim_3800_Hz_rayleigh_musician.wav", // 3
+  "musicien/audio_f-lim_3400_Hz_rayleigh_musician.wav", // 4
+  "musicien/audio_f-lim_3200_Hz_rayleigh_musician.wav", // 5
+  "musicien/audio_f-lim_3000_Hz_rayleigh_musician.wav", // 6
+  "musicien/audio_f-lim_2800_Hz_rayleigh_musician.wav", // 7
+  "musicien/audio_f-lim_2000_Hz_rayleigh_musician.wav", // 8
+  "musicien/audio_f-lim_1800_Hz_rayleigh_musician.wav", // 9
+  "musicien/audio_f-lim_1600_Hz_rayleigh_musician.wav"  // 10
+];
+
+let currentIndex = Math.floor(files.length / 2);
+let consecutiveCorrect = 0;
+let firstErrorOccurred = false;
+
+let indexHistory = [];
+let stagnationCount = 0;
+
+let reversalCount = 0;
+let lastDirection = null; // "down" ou "up"
+  
+let hardestLevelValidations = 0;
+  
+let trialNumber = 1;
+const MAX_TRIALS = 30;
+
+async function loadTrials() {
+  buildTrial();
+}
+let allResults = [];
+
+let comparisonFiles = [];
+
+
+// =========================
+// LIMITATION ECOUTES
+// =========================
+
+const MAX_PLAYS = 2;
+const playCounts = {};
+let listeningStep = "reference";
+function playOnce(audioId, buttonElement, label) {
+  if (
+  (listeningStep === "reference" && audioId !== "referenceAudio") ||
+  (listeningStep === "audioA" && audioId !== "audio_0") ||
+  (listeningStep === "audioB" && audioId !== "audio_1")
+) {
+  alert("Please listen in the required order.");
+  return;
+}
+  if (!playCounts[audioId]) {
+    playCounts[audioId] = 0;
+  }
+
+  if (playCounts[audioId] >= MAX_PLAYS) {
+    return;
+  }
+
+  const audio = document.getElementById(audioId);
+
+  if (!audio.paused) {
+    return;
+  }
+
+  playCounts[audioId]++;
+
+  audio.currentTime = 0;
+  audio.play();
+  if (audioId === "referenceAudio") {
+  listeningStep = "audioA";
+}
+else if (audioId === "audio_0") {
+  listeningStep = "audioB";
+}
+else if (audioId === "audio_1") {
+  listeningStep = "finished";
+}
+  const remaining = MAX_PLAYS - playCounts[audioId];
+
+  if (remaining > 0) {
+
+    if (audioId === "referenceAudio") {
+
+      buttonElement.innerText =
+        `▶ Reference (${remaining} left)`;
+
+    } else {
+
+      buttonElement.innerText =
+        `▶ Audio ${label} (${remaining} left)`;
+
+    }
+
+  } else {
+
+    buttonElement.disabled = true;
+
+    if (audioId === "referenceAudio") {
+
+      buttonElement.innerText =
+        "Reference listened twice";
+
+    } else {
+
+      buttonElement.innerText =
+        `Audio ${label} listened twice`;
+
+    }
+  }
+}
+
+async function playSequence() {
+
+  const button =
+    document.getElementById("playSequenceButton");
+
+  button.disabled = true;
+
+const audioA = document.getElementById("audio_0");
+const audioB = document.getElementById("audio_1");
+const audioC = document.getElementById("audio_2");
+
+activateIndicator("indicatorA");
+await playAndWait(audioA);
+
+activateIndicator("indicatorB");
+await playAndWait(audioB);
+
+activateIndicator("indicatorC");
+await playAndWait(audioC);
+
+clearIndicators();
+
+listeningStep = "finished";
+checkSelection();
+}
+function playAndWait(audio) {
+
+  return new Promise(resolve => {
+
+    audio.currentTime = 0;
+
+    audio.onended = resolve;
+
+    audio.play();
+  });
+}
+
+function pause(ms) {
+
+  return new Promise(resolve =>
+    setTimeout(resolve, ms)
+  );
+}
+
+// =========================
+// ENABLE SUBMIT
+// =========================
+
+function checkSelection() {
+
+  const selected =
+    document.querySelector(
+      'input[name="comparison"]:checked'
+    );
+
+  document.getElementById(
+  "submitButton"
+).disabled =
+  !selected || listeningStep !== "finished";
+}
+// =========================
+// SUBMIT
+// =========================
+
+async function submitTest() {
+  const selectedRadio = document.querySelector(
+    'input[name="comparison"]:checked'
+  );
+
+  if (!selectedRadio) {
+    alert("Sélectionnez la réponse A,B ou C.");
+    return;
+  }
+
+  const selected = selectedRadio.value;
+  
+  const button =
+    document.getElementById("submitButton");
+
+  button.disabled = true;
+  button.innerText = "Sending...";
+
+  const instrument =
+  document.getElementById("instrument")?.value || "";
+  
+  const participant =
+    document.getElementById("participant").value;
+
+  const age =
+    document.getElementById("age").value;
+
+  const device =
+    document.querySelector(
+      'input[name="device"]:checked'
+    )?.value || "";
+
+  const musician =
+    document.querySelector(
+      'input[name="musician"]:checked'
+    )?.value || "";
+
+  const yearsPractice =
+    document.getElementById(
+      "yearsPractice"
+    ).value || "";
+
+
+  const correctItem =
+    comparisonFiles.find(
+      item => item.isCorrect
+    );
+  
+  
+  const isCorrect =
+    selected === correctItem.visibleLabel;
+
+const presentedIndex = currentIndex;
+const currentFile = files[presentedIndex];
+if (isCorrect) {
+
+  consecutiveCorrect++;
+
+  if (consecutiveCorrect >= 3) {
+
+    if (currentIndex === 0) {
+
+      hardestLevelValidations++;
+
+    } else {
+
+      const step = firstErrorOccurred ? 1 : 4;
+
+      currentIndex = Math.max(0, currentIndex - step);
+      if (lastDirection === "up") {
+  reversalCount++;
+}
+lastDirection = "down";
+
+    }
+
+    consecutiveCorrect = 0;
+  }
+
+} else {
+
+  firstErrorOccurred = true;
+
+  currentIndex = Math.min(
+    files.length - 1,
+    currentIndex + 1
+  );
+  if (firstErrorOccurred && lastDirection === "down") {
+  reversalCount++;
+}
+lastDirection = "up";
+
+  consecutiveCorrect = 0;
+}
+
+// Historique des indices
+indexHistory.push(currentIndex);
+
+if (indexHistory.length >= 6) {
+
+  const n = indexHistory.length;
+
+  if (
+    indexHistory[n - 1] === indexHistory[n - 3] &&
+    indexHistory[n - 3] === indexHistory[n - 5] &&
+    indexHistory[n - 2] === indexHistory[n - 4] &&
+    indexHistory[n - 4] === indexHistory[n - 6] &&
+    indexHistory[n - 1] !== indexHistory[n - 2]
+  ) {
+    stagnationCount = 3;
+  }
+}
+  
+  
+  allResults.push({
+
+  index: presentedIndex,
+    
+  trial: trialNumber,
+
+  file: currentFile,
+
+  selected: selected,
+
+  correct: isCorrect,
+
+mapping:
+comparisonFiles
+.map(item =>
+`${item.visibleLabel}:${item.isCorrect ? "DIFFERENT" : "SAME"}`
+)
+.join(",")
+  });
+trialNumber++;
+
+if (
+  trialNumber <= MAX_TRIALS &&
+reversalCount < 6 &&
+hardestLevelValidations < 2
+) {
+
+  document.querySelector(
+    'input[name="comparison"]:checked'
+  ).checked = false;
+
+  buildTrial();
+
+  button.disabled = false;
+  button.innerText = "Submit";
+
+  return;
+}
+const responses = {};
+
+  allResults.forEach((result, index) => {
+
+  const trialNum = index + 1;
+
+  responses[`TRIAL${trialNum}_SELECTED`] = {
+    answer: result.selected,
+    chiave: `trial${trialNum}`
+  };
+
+  responses[`TRIAL${trialNum}_CORRECT`] = {
+    answer: result.correct,
+    chiave: `trial${trialNum}`
+  };
+
+  responses[`TRIAL${trialNum}_FILE`] = {
+  answer: result.file,
+  chiave: `trial${trialNum}`
+};
+
+responses[`TRIAL${trialNum}_INDEX`] = {
+  answer: result.index,
+  chiave: `trial${trialNum}`
+};
+
+});
+
+responses.AGE = {
+  answer: age,
+  chiave: "demographics"
+};
+
+responses.DEVICE = {
+  answer: device,
+  chiave: "demographics"
+};
+
+responses.MUSICIAN = {
+  answer: musician,
+  chiave: "demographics"
+};
+
+responses.INSTRUMENT = {
+  answer: instrument,
+  chiave: "demographics"
+};
+
+responses.YEARS_PRACTICE = {
+  answer: yearsPractice,
+  chiave: "demographics"
+};
+
+  console.log(responses);
+  responses.STOP_REASON = {
+  answer:
+    reversalCount >= 6
+      ? "6_reversals"
+      : hardestLevelValidations >= 2
+      ? "hardest_level_validated"
+      : "max_trials",
+  chiave: "experiment"
+};
+
+  try {
+
+    await fetch(
+      "https://script.google.com/macros/s/AKfycbxZcnmbUs3bwtbBTu-e2Fw8ONPd6cBFNj5tUmCtEh7Og9pAZWzBxbYjG34Gmn_AsJpi/exec",
+      {
+        method: "POST",
+        mode: "no-cors",
+        body: new URLSearchParams({
+          participant: participant,
+          responses: JSON.stringify(responses)
+        })
+      }
+    );
+
+    button.innerText = "Submitted ✓";
+
+    alert("Responses sent!");
+
+  } catch (error) {
+
+    console.error(error);
+
+    button.disabled = false;
+    button.innerText = "Submit";
+
+    alert("FETCH ERROR");
+  }
+}
+
+</script>
