@@ -1,18 +1,163 @@
 {
-  "Mi": {
-    "reference": "mi/reference.wav",
+  "A2_musician": {
+    "reference": "A2_musician/reference.wav",
     "files": [
-      "mi/audio_f-lim_8000_Hz_rayleigh.wav",
-      "mi/audio_f-lim_6000_Hz_rayleigh.wav",
-      "mi/audio_f-lim_4000_Hz_rayleigh.wav"
+      "A2_musician/audio_A2_f-lim_15000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_14500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_14000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_13500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_13000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_12500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_12000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_11500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_11000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_10500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_10000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_9500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_9000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_8500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_8000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_7500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_7000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_6500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_6000_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_5500_Hz_rayleigh_musician.wav",
+      "A2_musician/audio_A2_f-lim_5000_Hz_rayleigh_musician.wav"
     ]
   },
-  "Sol": {
-    "reference": "sol/reference.wav",
+
+  "B3_musician": {
+    "reference": "B3_musician/reference.wav",
     "files": [
-      "sol/audio_f-lim_8000_Hz_rayleigh.wav",
-      "sol/audio_f-lim_6000_Hz_rayleigh.wav",
-      "sol/audio_f-lim_4000_Hz_rayleigh.wav"
+      "B3_musician/audio_B3_f-lim_15000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_14500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_14000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_13500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_13000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_12500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_12000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_11500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_11000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_10500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_10000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_9500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_9000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_8500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_8000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_7500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_7000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_6500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_6000_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_5500_Hz_rayleigh_musician.wav",
+      "B3_musician/audio_B3_f-lim_5000_Hz_rayleigh_musician.wav"
+    ]
+  },
+
+  "D3_musician": {
+    "reference": "D3_musician/reference.wav",
+    "files": [
+      "D3_musician/audio_D3_f-lim_15000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_14500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_14000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_13500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_13000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_12500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_12000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_11500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_11000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_10500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_10000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_9500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_9000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_8500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_8000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_7500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_7000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_6500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_6000_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_5500_Hz_rayleigh_musician.wav",
+      "D3_musician/audio_D3_f-lim_5000_Hz_rayleigh_musician.wav"
+    ]
+  },
+
+  "E2_musician": {
+    "reference": "E2_musician/reference.wav",
+    "files": [
+      "E2_musician/audio_E2_f-lim_15000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_14500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_14000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_13500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_13000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_12500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_12000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_11500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_11000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_10500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_10000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_9500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_9000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_8500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_8000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_7500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_7000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_6500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_6000_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_5500_Hz_rayleigh_musician.wav",
+      "E2_musician/audio_E2_f-lim_5000_Hz_rayleigh_musician.wav"
+    ]
+  },
+
+  "E4_musician": {
+    "reference": "E4_musician/reference.wav",
+    "files": [
+      "E4_musician/audio_E4_f-lim_15000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_14500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_14000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_13500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_13000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_12500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_12000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_11500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_11000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_10500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_10000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_9500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_9000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_8500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_8000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_7500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_7000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_6500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_6000_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_5500_Hz_rayleigh_musician.wav",
+      "E4_musician/audio_E4_f-lim_5000_Hz_rayleigh_musician.wav"
+    ]
+  },
+
+  "G3_musician": {
+    "reference": "G3_musician/reference.wav",
+    "files": [
+      "G3_musician/audio_G3_f-lim_15000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_14500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_14000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_13500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_13000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_12500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_12000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_11500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_11000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_10500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_10000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_9500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_9000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_8500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_8000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_7500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_7000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_6500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_6000_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_5500_Hz_rayleigh_musician.wav",
+      "G3_musician/audio_G3_f-lim_5000_Hz_rayleigh_musician.wav"
     ]
   }
 }
