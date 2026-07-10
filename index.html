@@ -133,44 +133,44 @@
   <h2>Choose the guitar string</h2>
 
   <label>
-    <input type="radio" name="string" value="A2_musician">
-    A2 string
-  </label>
+  <input type="checkbox" name="string" value="A2_musician">
+  A2 string
+</label>
 
-  <br><br>
+<br><br>
 
-  <label>
-    <input type="radio" name="string" value="B3_musician">
-    B3 string
-  </label>
-
-  <br><br>
-  
 <label>
-    <input type="radio" name="string" value="D3_musician">
-    D3 string
-  </label>
+  <input type="checkbox" name="string" value="B3_musician">
+  B3 string
+</label>
 
-  <br><br>
+<br><br>
 
-  <label>
-    <input type="radio" name="string" value="E2_musician">
-    E2 string
-  </label>
+<label>
+  <input type="checkbox" name="string" value="D3_musician">
+  D3 string
+</label>
 
-  <br><br>
-  
-  <label>
-    <input type="radio" name="string" value="E4_musician">
-    E4 string
-  </label>
+<br><br>
 
-  <br><br>
+<label>
+  <input type="checkbox" name="string" value="E2_musician">
+  E2 string
+</label>
 
-  <label>
-    <input type="radio" name="string" value="G3_musician">
-    G3 string
-  </label>
+<br><br>
+
+<label>
+  <input type="checkbox" name="string" value="E4_musician">
+  E4 string
+</label>
+
+<br><br>
+
+<label>
+  <input type="checkbox" name="string" value="G3_musician">
+  G3 string
+</label>
 
   <br><br>
   
@@ -247,11 +247,13 @@ async function startExperiment() {
   soundSets = await fetch("sounds.json")
     .then(r => r.json());
 
-  const selectedString =
-    document.querySelector('input[name="string"]:checked').value;
+  selectedStrings = Array.from(
+    document.querySelectorAll('input[name="string"]:checked')
+).map(x => x.value);
 
-  files = soundSets[selectedString].files;
-  referenceFile = soundSets[selectedString].reference;
+currentString = 0;
+
+loadCurrentString();
 
   currentIndex = 14;
 
@@ -259,6 +261,27 @@ async function startExperiment() {
   document.getElementById("testPage").style.display = "block";
 
   await loadTrials();
+}
+
+function loadCurrentString() {
+
+    const stringName = selectedStrings[currentString];
+
+    files = soundSets[stringName].files;
+    referenceFile = soundSets[stringName].reference;
+
+    // réinitialisation de l'adaptatif
+    currentIndex = 8;
+    consecutiveCorrect = 0;
+    firstErrorOccurred = false;
+    reversalCount = 0;
+    lastDirection = null;
+    hardestLevelValidations = 0;
+    largeStepReversals = 0;
+    smallStepStartIndex = null;
+
+    buildTrial();
+
 }
   
 function buildTrial() {
@@ -440,6 +463,9 @@ let soundSets = {};
 let files = [];
 let referenceFile = "";
 
+let selectedStrings = [];
+let currentString = 0;
+  
 let currentIndex = Math.floor(files.length / 2);
 let consecutiveCorrect = 0;
 let firstErrorOccurred = false;
@@ -604,13 +630,17 @@ function checkSelection() {
   !selected || listeningStep !== "finished";
 }
 
-document.querySelectorAll('input[name="string"]').forEach(radio => {
+document.querySelectorAll('input[name="string"]').forEach(box => {
 
-  radio.addEventListener("change", () => {
+    box.addEventListener("change", () => {
 
-    document.getElementById("continueBtn").disabled = false;
+        const checked =
+            document.querySelectorAll('input[name="string"]:checked');
 
-  });
+        document.getElementById("continueBtn").disabled =
+            checked.length !== 2;
+
+    });
 
 });
 // =========================
@@ -743,6 +773,7 @@ if (indexHistory.length >= 6) {
   
   
   allResults.push({
+  string: selectedStrings[currentString],
 
   index: presentedIndex,
     
@@ -784,6 +815,11 @@ const responses = {};
   allResults.forEach((result, index) => {
 
   const trialNum = index + 1;
+
+  responses[`TRIAL${trialNum}_STRING`] = {
+    answer: result.string,
+    chiave: `trial${trialNum}`
+};
 
   responses[`TRIAL${trialNum}_SELECTED`] = {
     answer: result.selected,
@@ -848,21 +884,17 @@ responses.SMALL_STEP_START_INDEX = {
 
   try {
 
-    await fetch(
-      "https://script.google.com/macros/s/AKfycbxZcnmbUs3bwtbBTu-e2Fw8ONPd6cBFNj5tUmCtEh7Og9pAZWzBxbYjG34Gmn_AsJpi/exec",
-      {
-        method: "POST",
-        mode: "no-cors",
-        body: new URLSearchParams({
-          participant: participant,
-          responses: JSON.stringify(responses)
-        })
-      }
-    );
+    if (currentString < selectedStrings.length - 1) {
 
-    button.innerText = "Submitted ✓";
+    currentString++;
 
-    alert("Responses sent!");
+    alert("Fin du test pour la première corde. Le second test commence.");
+
+    loadCurrentString();
+
+    return;
+
+}
 
   } catch (error) {
 
