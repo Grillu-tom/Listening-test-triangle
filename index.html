@@ -271,7 +271,7 @@ function loadCurrentString() {
     referenceFile = soundSets[stringName].reference;
 
     // réinitialisation de l'adaptatif
-    currentIndex = 8;
+    currentIndex = 14;
     consecutiveCorrect = 0;
     firstErrorOccurred = false;
     reversalCount = 0;
@@ -818,6 +818,9 @@ if (
 
   return;
 }
+  
+experimentResults.push(...allResults);
+  
 const responses = {};
 
   experimentResults.forEach((result, index) => {
@@ -889,7 +892,6 @@ responses.SMALL_STEP_START_TRIAL = {
     chiave: "experiment"
 };
 
-experimentResults.push(...allResults);
 
   if (currentString < selectedStrings.length - 1) {
 
