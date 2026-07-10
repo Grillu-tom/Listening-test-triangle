@@ -279,6 +279,11 @@ function loadCurrentString() {
     hardestLevelValidations = 0;
     largeStepReversals = 0;
     smallStepStartIndex = null;
+    trialNumber = 1;
+    stepSize = 4;
+    consecutiveCorrect = 0;
+    reversalCount = 0;
+    smallStepStartTrial = null;
 
     buildTrial();
 
@@ -465,6 +470,8 @@ let referenceFile = "";
 
 let selectedStrings = [];
 let currentString = 0;
+
+let trialNumber = 1;
   
 let currentIndex = Math.floor(files.length / 2);
 let consecutiveCorrect = 0;
@@ -715,7 +722,7 @@ if (isCorrect) {
 
       const step = firstErrorOccurred ? 1 : 4;
 
-      currentIndex = Math.max(0, currentIndex - step);
+      currentIndex = Math.max(0, currentIndex - stepSize);
       if (lastDirection === "up") {
   reversalCount++;
         if (reversalCount === 2) {
