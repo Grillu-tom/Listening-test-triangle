@@ -263,7 +263,7 @@ async function startExperiment() {
   
 function buildTrial() {
   document.getElementById("trialCounter").innerText =
-`Trial ${trialNumber}/${MAX_TRIALS}`;
+`Trial ${trialNumber}`;
 
 const intruder = files[currentIndex];
 
@@ -456,7 +456,7 @@ let stepSize = 4;
 let hardestLevelValidations = 0;
   
 let trialNumber = 1;
-const MAX_TRIALS = 30;
+
 
 async function loadTrials() {
   buildTrial();
@@ -764,9 +764,8 @@ comparisonFiles
 trialNumber++;
 
 if (
-  trialNumber <= MAX_TRIALS &&
-reversalCount < 6 &&
-hardestLevelValidations < 2
+  reversalCount < 6 &&
+  hardestLevelValidations < 2
 ) {
 
   document.querySelector(
@@ -836,11 +835,9 @@ responses.YEARS_PRACTICE = {
   console.log(responses);
   responses.STOP_REASON = {
   answer:
-    reversalCount >= 6
-      ? "6_reversals"
-      : hardestLevelValidations >= 2
+    hardestLevelValidations >= 2
       ? "hardest_level_validated"
-      : "max_trials",
+      : "6_reversals",
   chiave: "experiment"
 };
 
