@@ -822,81 +822,38 @@ if (
   return;
 }
   
-experimentResults.push(...allResults);
-  
-const responses = {};
-
-  experimentResults.forEach((result, index) => {
-  const trialNum = index + 1;
-
-  responses[`TRIAL${trialNum}_STRING`] = {
-    answer: result.string,
-    chiave: `trial${trialNum}`
-};
-
-  responses[`TRIAL${trialNum}_SELECTED`] = {
-    answer: result.selected,
-    chiave: `trial${trialNum}`
-  };
-
-  responses[`TRIAL${trialNum}_CORRECT`] = {
-    answer: result.correct,
-    chiave: `trial${trialNum}`
-  };
-
-  responses[`TRIAL${trialNum}_FILE`] = {
-  answer: result.file,
-  chiave: `trial${trialNum}`
-};
-
-responses[`TRIAL${trialNum}_INDEX`] = {
-  answer: result.index,
-  chiave: `trial${trialNum}`
-};
-
+experimentResults.push({
+    string: selectedStrings[currentString],
+    trials: [...allResults],
+    stopReason:
+        hardestLevelValidations >= 2
+            ? "hardest_level_validated"
+            : "6_reversals",
+    smallStepStartTrial: smallStepStartTrial
 });
 
-responses.AGE = {
-  answer: age,
-  chiave: "demographics"
-};
+experimentResults.push({
+    stopReason:
+        hardestLevelValidations >= 2
+            ? "hardest_level_validated"
+            : "6_reversals",
+    smallStepStartTrial: smallStepStartTrial,
+    separator: true
+});
+  
+// Enregistrer les résultats de la corde qui vient de se terminer
+experimentResults.push({
+    string: selectedStrings[currentString],
+    trials: [...allResults],
+    stopReason:
+        hardestLevelValidations >= 2
+            ? "hardest_level_validated"
+            : "6_reversals",
+    smallStepStartTrial: smallStepStartTrial
+});
 
-responses.DEVICE = {
-  answer: device,
-  chiave: "demographics"
-};
-
-responses.MUSICIAN = {
-  answer: musician,
-  chiave: "demographics"
-};
-
-responses.INSTRUMENT = {
-  answer: instrument,
-  chiave: "demographics"
-};
-
-responses.YEARS_PRACTICE = {
-  answer: yearsPractice,
-  chiave: "demographics"
-};
-
-  console.log(responses);
-  responses.STOP_REASON = {
-  answer:
-    hardestLevelValidations >= 2
-      ? "hardest_level_validated"
-      : "6_reversals",
-  chiave: "experiment"
-};
-
-responses.SMALL_STEP_START_TRIAL = {
-    answer: smallStepStartTrial,
-    chiave: "experiment"
-};
-
-
-  if (currentString < selectedStrings.length - 1) {
+// S'il reste une corde à tester, on passe à la suivante
+if (currentString < selectedStrings.length - 1) {
 
     currentString++;
 
@@ -909,6 +866,82 @@ responses.SMALL_STEP_START_TRIAL = {
 
     return;
 }
+
+// Seulement ici on construit les réponses
+const responses = {};
+
+let trialNum = 1;
+
+experimentResults.forEach(exp => {
+
+    exp.trials.forEach(result => {
+
+        responses[`TRIAL${trialNum}_STRING`] = {
+            answer: result.string,
+            chiave: `trial${trialNum}`
+        };
+
+        responses[`TRIAL${trialNum}_SELECTED`] = {
+            answer: result.selected,
+            chiave: `trial${trialNum}`
+        };
+
+        responses[`TRIAL${trialNum}_CORRECT`] = {
+            answer: result.correct,
+            chiave: `trial${trialNum}`
+        };
+
+        responses[`TRIAL${trialNum}_FILE`] = {
+            answer: result.file,
+            chiave: `trial${trialNum}`
+        };
+
+        responses[`TRIAL${trialNum}_INDEX`] = {
+            answer: result.index,
+            chiave: `trial${trialNum}`
+        };
+
+        trialNum++;
+    });
+
+    responses[`STRING_${exp.string}_STOP_REASON`] = {
+        answer: exp.stopReason,
+        chiave: exp.string
+    };
+
+    responses[`STRING_${exp.string}_SMALL_STEP_START_TRIAL`] = {
+        answer: exp.smallStepStartTrial,
+        chiave: exp.string
+    };
+});
+
+// Données démographiques
+responses.AGE = {
+    answer: age,
+    chiave: "demographics"
+};
+
+responses.DEVICE = {
+    answer: device,
+    chiave: "demographics"
+};
+
+responses.MUSICIAN = {
+    answer: musician,
+    chiave: "demographics"
+};
+
+responses.INSTRUMENT = {
+    answer: instrument,
+    chiave: "demographics"
+};
+
+responses.YEARS_PRACTICE = {
+    answer: yearsPractice,
+    chiave: "demographics"
+};
+
+console.log(responses);
 
 try {
 
