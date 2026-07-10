@@ -449,6 +449,7 @@ let stagnationCount = 0;
 
 let reversalCount = 0;
 let lastDirection = null; // "down" ou "up"
+let stepSize = 4;
   
 let hardestLevelValidations = 0;
   
@@ -685,6 +686,9 @@ if (isCorrect) {
       currentIndex = Math.max(0, currentIndex - step);
       if (lastDirection === "up") {
   reversalCount++;
+        if (reversalCount === 2) {
+        stepSize = 1;
+    }
 }
 lastDirection = "down";
 
@@ -699,11 +703,17 @@ lastDirection = "down";
 
   currentIndex = Math.min(
     files.length - 1,
-    currentIndex + 1
-  );
-  if (firstErrorOccurred && lastDirection === "down") {
-  reversalCount++;
+    currentIndex + stepSize
+);
+
+if (lastDirection === "down") {
+    reversalCount++;
+
+    if (reversalCount === 2) {
+        stepSize = 1;
+    }
 }
+
 lastDirection = "up";
 
   consecutiveCorrect = 0;
