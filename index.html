@@ -471,6 +471,7 @@ let consecutiveCorrect = 0;
 let firstErrorOccurred = false;
 
 let smallStepStartIndex = null;
+let smallStepStartTrial = null;
 
 let indexHistory = [];
 let stagnationCount = 0;
@@ -481,7 +482,6 @@ let stepSize = 4;
   
 let hardestLevelValidations = 0;
   
-let trialNumber = 1;
 
 
 async function loadTrials() {
@@ -720,7 +720,7 @@ if (isCorrect) {
   reversalCount++;
         if (reversalCount === 2) {
         stepSize = 1;
-        smallStepStartIndex = currentIndex;
+        smallStepStartTrial = trialNumber;
     }
 }
 lastDirection = "down";
@@ -744,7 +744,7 @@ if (lastDirection === "down") {
 
     if (reversalCount === 2) {
         stepSize = 1;
-        smallStepStartIndex = currentIndex;
+        smallStepStartTrial = trialNumber;
     }
 }
 
@@ -877,26 +877,44 @@ responses.YEARS_PRACTICE = {
   chiave: "experiment"
 };
 
-responses.SMALL_STEP_START_INDEX = {
-    answer: smallStepStartIndex,
+responses.SMALL_STEP_START_TRIAL = {
+    answer: smallStepStartTrial,
     chiave: "experiment"
 };
 
-  try {
-
-    if (currentString < selectedStrings.length - 1) {
+  if (currentString < selectedStrings.length - 1) {
 
     currentString++;
 
-    alert("Fin du test pour la première corde. Le second test commence.");
+    alert("Fin du premier test. Le second test va commencer.");
 
     loadCurrentString();
 
-    return;
+    button.disabled = false;
+    button.innerText = "Submit";
 
+    return;
 }
 
-  } catch (error) {
+try {
+
+    await fetch(
+      "https://script.google.com/macros/s/AKfycbxZcnmbUs3bwtbBTu-e2Fw8ONPd6cBFNj5tUmCtEh7Og9pAZWzBxbYjG34Gmn_AsJpi/exec",
+      {
+        method: "POST",
+        mode: "no-cors",
+        body: new URLSearchParams({
+          participant: participant,
+          responses: JSON.stringify(responses)
+        })
+      }
+    );
+
+    button.innerText = "Submitted ✓";
+
+    alert("Responses sent!");
+
+} catch (error) {
 
     console.error(error);
 
@@ -904,7 +922,8 @@ responses.SMALL_STEP_START_INDEX = {
     button.innerText = "Submit";
 
     alert("FETCH ERROR");
-  }
+
+}
 }
 
 </script>
