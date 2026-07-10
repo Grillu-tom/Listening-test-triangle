@@ -712,53 +712,56 @@ const presentedIndex = currentIndex;
 const currentFile = files[presentedIndex];
 if (isCorrect) {
 
-  consecutiveCorrect++;
+    consecutiveCorrect++;
 
-  if (consecutiveCorrect >= 3) {
+    if (consecutiveCorrect >= 3) {
 
-    if (currentIndex === 0) {
+        if (currentIndex === 0) {
 
-      hardestLevelValidations++;
+            hardestLevelValidations++;
 
-    } else {
+        } else {
 
+            // Détection du reversal AVANT le déplacement
+            if (lastDirection === "up") {
+                reversalCount++;
 
-      currentIndex = Math.max(0, currentIndex - stepSize);
-      if (lastDirection === "up") {
-  reversalCount++;
-        if (reversalCount === 2) {
-        stepSize = 1;
-        smallStepStartTrial = trialNumber;
+                if (reversalCount === 2) {
+                    stepSize = 1;
+                    smallStepStartTrial = trialNumber;
+                }
+            }
+
+            currentIndex = Math.max(0, currentIndex - stepSize);
+
+            lastDirection = "down";
+        }
+
+        consecutiveCorrect = 0;
     }
-}
-lastDirection = "down";
-
-    }
-
-    consecutiveCorrect = 0;
-  }
 
 } else {
 
-  firstErrorOccurred = true;
+    firstErrorOccurred = true;
 
-  currentIndex = Math.min(
-    files.length - 1,
-    currentIndex + stepSize
-);
+    // Détection du reversal AVANT le déplacement
+    if (lastDirection === "down") {
+        reversalCount++;
 
-if (lastDirection === "down") {
-    reversalCount++;
-
-    if (reversalCount === 2) {
-        stepSize = 1;
-        smallStepStartTrial = trialNumber;
+        if (reversalCount === 2) {
+            stepSize = 1;
+            smallStepStartTrial = trialNumber;
+        }
     }
-}
 
-lastDirection = "up";
+    currentIndex = Math.min(
+        files.length - 1,
+        currentIndex + stepSize
+    );
 
-  consecutiveCorrect = 0;
+    lastDirection = "up";
+
+    consecutiveCorrect = 0;
 }
 
 // Historique des indices
