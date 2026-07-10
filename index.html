@@ -277,13 +277,15 @@ function loadCurrentString() {
     reversalCount = 0;
     lastDirection = null;
     hardestLevelValidations = 0;
-    largeStepReversals = 0;
     smallStepStartIndex = null;
     trialNumber = 1;
     stepSize = 4;
     consecutiveCorrect = 0;
     reversalCount = 0;
     smallStepStartTrial = null;
+    allResults = [];
+    indexHistory = [];
+    stagnationCount = 0;
 
     buildTrial();
 
@@ -295,7 +297,6 @@ function buildTrial() {
 
 const intruder = files[currentIndex];
 
-const matchIsA = Math.random() < 0.5;
 const positions = shuffle([0,1,2]);
 
 comparisonFiles = [
@@ -495,7 +496,8 @@ async function loadTrials() {
   buildTrial();
 }
 let allResults = [];
-
+let experimentResults = [];
+  
 let comparisonFiles = [];
 
 
@@ -720,7 +722,6 @@ if (isCorrect) {
 
     } else {
 
-      const step = firstErrorOccurred ? 1 : 4;
 
       currentIndex = Math.max(0, currentIndex - stepSize);
       if (lastDirection === "up") {
@@ -819,8 +820,7 @@ if (
 }
 const responses = {};
 
-  allResults.forEach((result, index) => {
-
+  experimentResults.forEach((result, index) => {
   const trialNum = index + 1;
 
   responses[`TRIAL${trialNum}_STRING`] = {
@@ -888,6 +888,8 @@ responses.SMALL_STEP_START_TRIAL = {
     answer: smallStepStartTrial,
     chiave: "experiment"
 };
+
+experimentResults.push(...allResults);
 
   if (currentString < selectedStrings.length - 1) {
 
