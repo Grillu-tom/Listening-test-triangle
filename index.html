@@ -250,7 +250,8 @@ async function startExperiment() {
   selectedStrings = Array.from(
     document.querySelectorAll('input[name="string"]:checked')
 ).map(x => x.value);
-
+shuffle(selectedStrings);
+  
 currentString = 0;
 
 loadCurrentString();
@@ -852,39 +853,50 @@ if (currentString < selectedStrings.length - 1) {
 // Seulement ici on construit les réponses
 const responses = {};
 
-let trialNum = 1;
-
 experimentResults.forEach(exp => {
 
     exp.trials.forEach(result => {
 
-        responses[`TRIAL${trialNum}_STRING`] = {
+        const trialNum = result.trial;   // <-- repart à 1 pour chaque corde
+
+        responses[`${exp.string}_TRIAL${trialNum}_STRING`] = {
             answer: result.string,
-            chiave: `trial${trialNum}`
+            chiave: `${exp.string}_trial${trialNum}`
         };
 
-        responses[`TRIAL${trialNum}_SELECTED`] = {
+        responses[`${exp.string}_TRIAL${trialNum}_SELECTED`] = {
             answer: result.selected,
-            chiave: `trial${trialNum}`
+            chiave: `${exp.string}_trial${trialNum}`
         };
 
-        responses[`TRIAL${trialNum}_CORRECT`] = {
+        responses[`${exp.string}_TRIAL${trialNum}_CORRECT`] = {
             answer: result.correct,
-            chiave: `trial${trialNum}`
+            chiave: `${exp.string}_trial${trialNum}`
         };
 
-        responses[`TRIAL${trialNum}_FILE`] = {
+        responses[`${exp.string}_TRIAL${trialNum}_FILE`] = {
             answer: result.file,
-            chiave: `trial${trialNum}`
+            chiave: `${exp.string}_trial${trialNum}`
         };
 
-        responses[`TRIAL${trialNum}_INDEX`] = {
+        responses[`${exp.string}_TRIAL${trialNum}_INDEX`] = {
             answer: result.index,
-            chiave: `trial${trialNum}`
+            chiave: `${exp.string}_trial${trialNum}`
         };
 
-        trialNum++;
     });
+
+    responses[`STRING_${exp.string}_STOP_REASON`] = {
+        answer: exp.stopReason,
+        chiave: exp.string
+    };
+
+    responses[`STRING_${exp.string}_SMALL_STEP_START_TRIAL`] = {
+        answer: exp.smallStepStartTrial,
+        chiave: exp.string
+    };
+
+});
 
     responses[`STRING_${exp.string}_STOP_REASON`] = {
         answer: exp.stopReason,
