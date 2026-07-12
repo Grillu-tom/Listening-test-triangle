@@ -898,16 +898,6 @@ experimentResults.forEach(exp => {
 
 });
 
-    responses[`STRING_${exp.string}_STOP_REASON`] = {
-        answer: exp.stopReason,
-        chiave: exp.string
-    };
-
-    responses[`STRING_${exp.string}_SMALL_STEP_START_TRIAL`] = {
-        answer: exp.smallStepStartTrial,
-        chiave: exp.string
-    };
-});
 
 // Données démographiques
 responses.AGE = {
