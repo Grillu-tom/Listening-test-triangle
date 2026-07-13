@@ -232,6 +232,20 @@
 
 <script>
 
+<!-- ================= END PAGE ================= -->
+
+<div id="endPage" style="display:none; text-align:center; margin-top:80px;">
+
+    <h1>Merci !</h1>
+
+    <p>Le test est maintenant terminé.</p>
+
+    <p>Vos réponses ont bien été enregistrées.</p>
+
+    <p>Merci d'avoir participé à cette expérience.</p>
+
+</div>
+
 // =========================
 // NAVIGATION
 // =========================
@@ -943,7 +957,11 @@ try {
 
     button.innerText = "Submitted ✓";
 
-    alert("Responses sent!");
+// cacher la page du test
+document.getElementById("testPage").style.display = "none";
+
+// afficher la page de fin
+document.getElementById("endPage").style.display = "block";
 
 } catch (error) {
 
