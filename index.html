@@ -411,6 +411,7 @@ function loadCurrentString() {
     allResults = [];
     indexHistory = [];
     stagnationCount = 0;
+    reversalIndices = [];
 
     buildTrial();
 
@@ -638,6 +639,8 @@ let currentIndex = Math.floor(files.length / 2);
 let consecutiveCorrect = 0;
 let firstErrorOccurred = false;
 
+let reversalIndices = [];
+  
 let smallStepStartIndex = null;
 let smallStepStartTrial = null;
 
@@ -891,6 +894,8 @@ if (isCorrect) {
             // Détection du reversal AVANT le déplacement
             if (lastDirection === "up") {
                 reversalCount++;
+                
+                reversalIndices.push(currentIndex);
 
                 if (reversalCount === 2) {
                     stepSize = 1;
@@ -914,6 +919,8 @@ if (isCorrect) {
     if (lastDirection === "down") {
         reversalCount++;
 
+        reversalIndices.push(currentIndex);
+      
         if (reversalCount === 2) {
             stepSize = 1;
             smallStepStartTrial = trialNumber;
@@ -988,7 +995,18 @@ if (
   return;
 }
   
+const cutoffFrequencies = [
+15000,14500,14000,13500,13000,
+12500,12000,11500,11000,10500,
+10000,9500,9000,8500,8000,
+7500,7000,6500,6000,5500,5000
+];
+const lastReversals = reversalIndices.slice(-4);
 
+const thresholdHz =
+    lastReversals
+        .map(i => cutoffFrequencies[i])
+        .reduce((a,b)=>a+b,0) / lastReversals.length;
   
 experimentResults.push({
     string: selectedStrings[currentString],
@@ -998,6 +1016,7 @@ experimentResults.push({
             ? "hardest_level_validated"
             : "6_reversals",
     smallStepStartTrial: smallStepStartTrial
+    thresholdIndex: thresholdIndex
 });
 
 // S'il reste une corde à tester, on passe à la suivante
@@ -1048,6 +1067,7 @@ experimentResults.forEach(exp => {
             answer: result.index,
             chiave: `${exp.string}_trial${trialNum}`
         };
+      
 
     });
 
@@ -1060,6 +1080,10 @@ experimentResults.forEach(exp => {
         answer: exp.smallStepStartTrial,
         chiave: exp.string
     };
+  responses[`STRING_${exp.string}_THRESHOLD_Hz`] = {
+    answer: exp.thresholdHz,
+    chiave: exp.string
+};
 
 });
 
