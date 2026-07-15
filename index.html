@@ -1003,10 +1003,14 @@ const cutoffFrequencies = [
 ];
 const lastReversals = reversalIndices.slice(-4);
 
-const thresholdHz =
-    lastReversals
-        .map(i => cutoffFrequencies[i])
-        .reduce((a,b)=>a+b,0) / lastReversals.length;
+let thresholdHz = "";
+
+if (lastReversals.length > 0) {
+    thresholdHz =
+        lastReversals
+            .map(i => cutoffFrequencies[i])
+            .reduce((a,b) => a + b, 0) / lastReversals.length;
+}
   
 experimentResults.push({
     string: selectedStrings[currentString],
@@ -1015,8 +1019,8 @@ experimentResults.push({
         hardestLevelValidations >= 2
             ? "hardest_level_validated"
             : "6_reversals",
-    smallStepStartTrial: smallStepStartTrial
-    thresholdIndex: thresholdIndex
+    smallStepStartTrial: smallStepStartTrial,
+    thresholdHz: thresholdHz
 });
 
 // S'il reste une corde à tester, on passe à la suivante
