@@ -83,17 +83,73 @@
 
   <br><br>
 
-  <label>Moyen d'écoute:</label><br>
+  <label>Moyen d'écoute :</label><br>
 
-  <label>
-    <input type="radio" name="device" value="Headphones">
-    Ecouteurs, casques audio
-  </label>
+<label>
+  <input type="radio" name="device" value="Casque"
+         onchange="toggleDeviceDetails()">
+  Casque
+</label><br>
 
-  <label>
-    <input type="radio" name="device" value="Speakers">
-    haut-parleurs
-  </label>
+<label>
+  <input type="radio" name="device" value="Ecouteurs"
+         onchange="toggleDeviceDetails()">
+  Écouteurs
+</label><br>
+
+<label>
+  <input type="radio" name="device" value="HP_PC"
+         onchange="toggleDeviceDetails()">
+  Haut-parleurs de PC
+</label><br>
+
+<label>
+  <input type="radio" name="device" value="PortableSpeaker"
+         onchange="toggleDeviceDetails()">
+  Enceinte portative
+</label><br>
+
+<label>
+  <input type="radio" name="device" value="MonitoringSpeaker"
+         onchange="toggleDeviceDetails()">
+  Enceintes de monitoring
+</label>
+
+<br><br>
+
+<div id="deviceDetails" style="display:none;">
+
+    <label>Connexion filaire ?</label><br>
+
+    <label>
+        <input type="radio" name="wired" value="Yes"
+               onchange="validateIntro()">
+        Oui
+    </label>
+
+    <label>
+        <input type="radio" name="wired" value="No"
+               onchange="validateIntro()">
+        Non
+    </label>
+
+    <br><br>
+
+    <label>Réduction de bruit active ?</label><br>
+
+    <label>
+        <input type="radio" name="noiseCancelling" value="Yes"
+               onchange="validateIntro()">
+        Oui
+    </label>
+
+    <label>
+        <input type="radio" name="noiseCancelling" value="No"
+               onchange="validateIntro()">
+        Non
+    </label>
+
+</div>
 
   <br><br>
 
@@ -466,6 +522,28 @@ function toggleInstrument(show) {
   validateIntro();
 }
 
+function toggleDeviceDetails() {
+
+    const device =
+        document.querySelector('input[name="device"]:checked')?.value;
+
+    const show =
+        device === "Casque" || device === "Ecouteurs";
+
+    document.getElementById("deviceDetails").style.display =
+        show ? "block" : "none";
+
+    if (!show) {
+
+        document.querySelectorAll('input[name="wired"]').forEach(r => r.checked = false);
+
+        document.querySelectorAll('input[name="noiseCancelling"]').forEach(r => r.checked = false);
+
+    }
+
+    validateIntro();
+}
+
 // =========================
 // VALIDATION INTRO
 // =========================
@@ -484,6 +562,12 @@ function validateIntro() {
   const device =
     document.querySelector('input[name="device"]:checked');
 
+  const wired =
+    document.querySelector('input[name="wired"]:checked');
+
+const noise =
+    document.querySelector('input[name="noiseCancelling"]:checked');
+
   const musician =
     document.querySelector('input[name="musician"]:checked');
 
@@ -498,6 +582,13 @@ function validateIntro() {
   if (participant === "") valid = false;
   if (age === "") valid = false;
   if (!device) valid = false;
+  if (
+    device &&
+    (device.value === "Casque" || device.value === "Ecouteurs")
+) {
+    if (!wired) valid = false;
+    if (!noise) valid = false;
+}
   if (!musician) valid = false;
 
   if (musician && musician.value === "Yes") {
@@ -765,6 +856,12 @@ async function submitTest() {
   const isCorrect =
     selected === correctItem.visibleLabel;
 
+  const wired =
+    document.querySelector('input[name="wired"]:checked')?.value || "";
+
+const noiseCancelling =
+    document.querySelector('input[name="noiseCancelling"]:checked')?.value || "";
+
 const presentedIndex = currentIndex;
 const currentFile = files[presentedIndex];
 if (isCorrect) {
@@ -978,6 +1075,16 @@ responses.INSTRUMENT = {
 
 responses.YEARS_PRACTICE = {
     answer: yearsPractice,
+    chiave: "demographics"
+};
+
+responses.WIRED = {
+    answer: wired,
+    chiave: "demographics"
+};
+
+responses.NOISE_CANCELLING = {
+    answer: noiseCancelling,
     chiave: "demographics"
 };
 
